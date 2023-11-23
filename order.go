@@ -143,6 +143,10 @@ type OrderOutput struct {
 	client *Client
 }
 
+// start
+
+//
+
 // Update returns any errors and updates the item with any recent changes.
 func (o *OrderOutput) Update(ctx context.Context) error {
 	return o.client.GetAndDecode(ctx, o.URL, o)
@@ -185,12 +189,12 @@ func (c *Client) RecentOrders(ctx context.Context) ([]OrderOutput, error) {
 }
 
 // AllOrders returns all orders made by this client.
-func (c *Client) AllOrders(ctx context.Context) ([]OrderOutput, error) {
+func (c *Client) AllOrders(ctx context.Context) ([]OptionOrder, error) {
 	var o struct {
-		Results []OrderOutput
+		Results []OptionOrder
 	}
 
-	urls := []string{EPOrders, EPOptionOrders}
+	urls := []string{EPOptionOrders} // EPOrders, 
 	for _, url := range urls {
 		for {
 			select {
@@ -200,7 +204,7 @@ func (c *Client) AllOrders(ctx context.Context) ([]OrderOutput, error) {
 			}
 	
 			var tmp struct {
-				Results []OrderOutput
+				Results []OptionOrder
 				Next    string
 			}
 			err := c.GetAndDecode(ctx, url, &tmp)
